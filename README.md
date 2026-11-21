@@ -12,6 +12,8 @@ The project progresses from TF-IDF-based baselines to a fine-tuned DistilBERT mo
 | Linear SVM + TF-IDF | ~85% | ~84% |
 | DistilBERT | **93.36%** | **93.06%** |
 
+![Model Comparison](results/figures/model_comparison.png)
+
 Final DistilBERT test performance:
 
 | Metric | Score |
@@ -126,6 +128,13 @@ sarcasm-detection-nlp/
 │   └── 07_full_model_comparison.ipynb
 │
 ├── results/
+|   ├── figures/
+│   │   ├── class_distribution.png
+│   │   ├── model_comparison.png
+│   │   └── distilbert_confusion_matrix.png
+│   ├── logistic_regression_metrics.csv
+│   ├── svm_metrics.csv
+│   └── distilbert_test_metrics.csv
 │   ├── logistic_regression_metrics.csv
 │   ├── svm_metrics.csv
 │   └── distilbert_test_metrics.csv
@@ -145,6 +154,10 @@ sarcasm-detection-nlp/
 ---
 
 ## Exploratory Data Analysis
+
+The dataset was inspected for class balance, duplicates, missing values, and headline-length patterns.
+
+![Class Distribution](results/figures/class_distribution.png)
 
 The exploratory analysis examines:
 
@@ -256,6 +269,8 @@ After model selection, DistilBERT was evaluated once on the untouched test set.
 | Recall | **93.56%** |
 | F1-score | **92.24%** |
 | Test Loss | 0.2690 |
+
+![DistilBERT Confusion Matrix](results/figures/distilbert_confusion_matrix.png)
 
 ### Test Confusion Matrix
 
