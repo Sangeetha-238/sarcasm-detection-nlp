@@ -274,10 +274,10 @@ After model selection, DistilBERT was evaluated once on the untouched test set.
 
 ### Test Confusion Matrix
 
-- True Negatives: **2,054**
-- False Positives: **189**
-- False Negatives: **131**
-- True Positives: **1,902**
+- True Negatives: **2,073**
+- False Positives: **169**
+- False Negatives: **121**
+- True Positives: **1,912**
 
 The test performance remained close to the validation performance, suggesting that the model generalizes well to unseen examples drawn from the same dataset distribution.
 
