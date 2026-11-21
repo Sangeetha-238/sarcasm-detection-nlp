@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A research report comparing TF-IDF baselines and DistilBERT for sarcasm detection in news headlines.">
+  <title>Sarcasm Detection with NLP</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="header">
+    <div class="shell navigation">
+      <a class="brand" href="./">Headline Sarcasm</a>
+      <nav aria-label="Report">
+        <a href="#data">Data</a>
+        <a href="#methods">Methods</a>
+        <a href="#results">Results</a>
+        <a href="#limitations">Limitations</a>
+      </nav>
+      <a class="repo" href="https://github.com/Sangeetha-238/sarcasm-detection-nlp">GitHub repository</a>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div class="shell hero-layout">
+        <div>
+
+          <h1>Sarcasm detection in news headlines</h1>
+          <p class="intro">A comparison of two TF-IDF baselines and fine-tuned DistilBERT on labeled news and satire headlines.</p>
+        </div>
+        <figure class="example">
+          <figcaption>Illustrative example</figcaption>
+          <blockquote>“Local man shocked to discover actions have consequences”</blockquote>
+          <p>The wording resembles a news report. The punchline comes from treating an ordinary fact as a surprising discovery.</p>
+        </figure>
+      </div>
+    </section>
+    <section class="snapshot" aria-label="Results at a glance">
+      <div class="shell metrics">
+        <div><strong>92.52%</strong><span>DistilBERT test accuracy</span></div>
+        <div><strong>92.24%</strong><span>DistilBERT test F1</span></div>
+        <div><strong>56%</strong><span>Fewer validation errors vs. Linear SVM</span></div>
+      </div>
+    </section>
+    <section class="shell section split" id="data">
+      <div>
+
+        <h2>News and satire</h2>
+        <p>The project uses Rishabh Misra’s News Headlines Dataset for Sarcasm Detection. Each record contains a headline, a binary label, and a source article URL.</p>
+        <p>Preprocessing removes duplicate headlines and preserves wording and punctuation that can carry sarcasm cues. A stratified split allocates 70% to training and 15% each to validation and test.</p>
+        <a href="https://github.com/rishabhmisra/News-Headlines-Dataset-For-Sarcasm-Detection">View the dataset source</a>
+      </div>
+      <figure class="figure">
+        <img src="assets/class_distribution.png" alt="Class distribution of sarcastic and non-sarcastic headlines in the project dataset" loading="lazy">
+        <figcaption>Class distribution from the exploratory analysis.</figcaption>
+      </figure>
+    </section>
+    <section class="band" id="methods">
+      <div class="shell section">
+
+        <h2>From word counts to context</h2>
+        <div class="method-grid">
+          <article><h3>Logistic Regression</h3><p>A linear baseline using TF-IDF features for individual words and adjacent word pairs.</p></article>
+          <article><h3>Linear SVM</h3><p>A second linear classifier trained on the same TF-IDF representation and data split.</p></article>
+          <article><h3>DistilBERT</h3><p>A pretrained transformer fine-tuned for binary classification. Its token representations depend on surrounding words.</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="shell section" id="results">
+
+      <h2>What changed with DistilBERT?</h2>
+      <p class="lede">The TF-IDF models performed similarly. DistilBERT reduced validation errors from 648 to 284 compared with Linear SVM.</p>
+      <div class="split results-grid">
+        <div>
+          <table>
+            <caption>Validation comparison</caption>
+            <thead><tr><th scope="col">Model</th><th scope="col">Accuracy</th><th scope="col">F1</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Logistic Regression</th><td>84.65%</td><td>84.06%</td></tr>
+              <tr><th scope="row">Linear SVM</th><td>84.84%</td><td>84.25%</td></tr>
+              <tr class="highlight"><th scope="row">DistilBERT</th><td>93.36%</td><td>93.06%</td></tr>
+            </tbody>
+          </table>
+          <table>
+            <caption>DistilBERT test metrics from the CSV export</caption>
+            <thead><tr><th scope="col">Metric</th><th scope="col">Score</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Accuracy</th><td>92.52%</td></tr>
+              <tr><th scope="row">Precision</th><td>90.96%</td></tr>
+              <tr><th scope="row">Recall</th><td>93.56%</td></tr>
+              <tr><th scope="row">F1</th><td>92.24%</td></tr>
+              <tr><th scope="row">Loss</th><td>0.2690</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="figure">
+          <img src="assets/distilbert_confusion_matrix.png" alt="Test confusion matrix showing 2,073 true negatives, 169 false positives, 121 false negatives, and 1,912 true positives" loading="lazy">
+          <figcaption>The saved confusion matrix contains 4,275 predictions and implies 93.22% accuracy. The separate test metrics CSV reports 92.52%. The exports do not establish why they differ.</figcaption>
+        </figure>
+      </div>
+    </section>
+    <section class="band" id="limitations">
+      <div class="shell section split">
+        <div>
+
+          <h2>Where the model struggles</h2>
+          <p>The test set comes from the same dataset as the training set. Informal checks found that conversational sarcasm and unfamiliar news styles can still be misclassified.</p>
+        </div>
+        <div class="details">
+          <details open><summary>Real headlines flagged as sarcasm</summary><p>Unusual events and exaggerated wording can resemble satirical headlines.</p></details>
+          <details><summary>Sarcasm missed by the model</summary><p>Subtle absurdity or references that require background knowledge can be difficult to detect from a headline alone.</p></details>
+          <details><summary>Confidence and source bias</summary><p>The model can learn writing patterns specific to the news and satire sources in the dataset. Its softmax confidence can be high on an incorrect prediction and has not been calibrated.</p></details>
+        </div>
+      </div>
+    </section>
+    <section class="shell section split" id="reproduce">
+      <div>
+
+        <h2>From notebooks to inference</h2>
+        <p>The repository includes notebooks, metrics, and a command-line predictor. Download the dataset separately and train and save the DistilBERT checkpoint before running local predictions.</p>
+        <a href="https://github.com/Sangeetha-238/sarcasm-detection-nlp#installation">Read the setup instructions</a>
+      </div>
+      <div class="terminal">
+        <p>Run a local prediction</p>
+        <pre><code>python src/predict.py "Local man shocked to discover actions have consequences"</code></pre>
+        <small>Expects the saved model in <code>models/distilbert-sarcasm-final/</code>.</small>
+      </div>
+    </section>
+  </main>
+  <footer><div class="shell footer"><span>Sarcasm Detection with NLP · Sangeetha Kanithahalli Ramesh</span><a href="https://github.com/Sangeetha-238/sarcasm-detection-nlp">View source</a></div></footer>
+</body>
+</html>
